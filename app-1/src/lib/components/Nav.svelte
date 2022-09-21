@@ -1,8 +1,34 @@
+<script>
+     import { page } from '$app/stores';
+   import { afterNavigate } from '$app/navigation';
+
+
+   afterNavigate(() => {
+   const oldPage = document.querySelector('.active');
+   const activPage = document.querySelector('[href="' + 
+                     $page.url.pathname + '"]');
+ 
+   if (oldPage != null && activPage != null) {
+       oldPage.classList.remove('active');
+   }
+ 
+   if (activPage != null && !activPage.classList.contains('active'))
+       activPage.classList.add('active');
+});
+
+
+
+    let displayMenu = 'none';
+    let show = false;
+  
+    $: displayMenu = show ? 'block' : 'none';
+ </script>
+ 
 <nav>
-    <button>
+    <button on:click={()=>show = !show}>
         <img src="/btn-menu.svg" alt="menu btn" height="25" />
     </button>
-    <ul>
+    <ul on:click={()=>show = false} style="--nav-ul-display: {displayMenu}">
         <li><a href="/">Hem</a></li>
         <li><a href="/course">Kurs</a></li>
         <li><a href="/about">Om</a></li>
@@ -24,7 +50,7 @@
             display: none;
             padding: 0;
         }
-        ul {
+        ul { 
             list-style-type: none;
             overflow: hidden;
             background-color: #333;
@@ -77,4 +103,8 @@
             margin-right: var(--margin-s);
         }
     }
+
+:global(nav li a.active) {
+    background-color: #ff3e00;
+}
 </style>
